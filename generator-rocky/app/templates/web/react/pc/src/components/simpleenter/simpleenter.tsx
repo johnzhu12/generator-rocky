@@ -10,7 +10,7 @@ interface PropSimpleenter {
     form: any;
 }
 
-class Biz extends React.Component<PropSimpleenter, {}>{
+class Simpleenter extends React.Component<PropSimpleenter, {}>{
     state = {
         previewVisible: false,
         previewImage: '',
@@ -189,5 +189,5 @@ class Biz extends React.Component<PropSimpleenter, {}>{
         )
     }
 }
-const Simple = Form.create()(Biz)
+const Simple = Form.create()(Simpleenter)
 export default Simple

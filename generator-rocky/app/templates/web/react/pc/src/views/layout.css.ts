@@ -20,6 +20,9 @@ injectGlobal`
     background-color: #fff;
     padding: 10px 1%;
 }
+.rowStyle{
+    margin-bottom: 40px;
+}
 `
 
 export default layout;

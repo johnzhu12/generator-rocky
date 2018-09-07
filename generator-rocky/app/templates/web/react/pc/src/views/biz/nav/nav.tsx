@@ -29,6 +29,9 @@ class Nav extends React.Component<{}, {}>{
                     <Menu.Item key='/listoper'>
                         列表操作页面
                     </Menu.Item>
+                    <Menu.Item key='/searchList'>
+                        查询列表页面
+                    </Menu.Item>
 
 
                 </SubMenu>
