@@ -30,7 +30,13 @@ class Biz extends React.Component<{}, {}>{
 
     createPdf() {
         let base64Str = this.base64String.split(';base64,').pop();
-        App.fileAction.generatePdf(base64Str)
+        App.fileAction.generatePdf(base64Str, '/Users/johnzhu/Desktop/demo.pdf', (flag) => {
+            if (flag) {
+                console.log('生成pdf成功！')
+            } else {
+                console.log('生成pdf失败！')
+            }
+        })
     }
 
     render() {

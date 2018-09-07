@@ -1,11 +1,30 @@
 var crypto = require("crypto");
 var eccrypto = require("eccrypto");
 var base64 = require('file-base64');
+const dialog = require('electron').dialog
 
-function generatePdf(base64Str) {
-    base64.decode(base64Str, 'a.pdf', function (err, output) {
-        console.log('success');
-    });
+function generatePdf(base64Str, defaultPathFileName, callback) {
+    // console.log('base64Str', base64Str)
+    let dirArr = defaultPathFileName.split('/');
+    let fileName = dirArr[dirArr.length - 1]
+    let postfix = fileName.split('.')[1]
+    dialog.showSaveDialog({
+        defaultPath: defaultPathFileName,
+        properties: [
+            'openFile'
+        ],
+        filters: [{
+            name: '',
+            extensions: [postfix]
+        }]
+    }, function (res) {
+        if (res) {
+            base64.decode(base64Str, res, function (err, output) {
+                callback(true)  //成功
+            });
+        }
+    })
+
 }
 
 
@@ -28,9 +47,13 @@ function generatePdf(base64Str) {
 // });
 
 //ECDSA加密
+function encrytECDSA() {
 
+}
 //ECDSA解密
+function decrytECDSA() {
 
+}
 module.exports = {
     generatePdf
 }
