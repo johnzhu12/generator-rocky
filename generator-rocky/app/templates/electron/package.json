@@ -10,6 +10,7 @@
     "antd": "^2.13.11",
     "eccrypto": "^1.0.3",
     "electron": "^2.0.8",
+    "electron-packager": "^8.5.1",
     "file-base64": "^1.0.0",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",
@@ -25,7 +26,8 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "build:osx": "./scripts/build.sh darwin x64"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
