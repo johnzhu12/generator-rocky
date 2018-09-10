@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {},
-  "author": "",
+  "author": "johnzhu",
   "license": "ISC",
   "files": [
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator,react,angular,vue,electron"
   ],
   "dependencies": {
     "yeoman-generator": "^2.0.0"
