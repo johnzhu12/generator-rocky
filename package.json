@@ -1,13 +1,14 @@
 {
   "name": "generator-rocky",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "main": "index.js",
   "scripts": {},
   "author": "johnzhu",
   "license": "ISC",
   "files": [
-    "app"
+    "app",
+    "docs"
   ],
   "keywords": [
     "yeoman-generator,react,angular,vue,electron,react-native,mini,flutter,scaffolding"
