@@ -1,6 +1,6 @@
 {
   "name": "generator-rocky",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {},
@@ -10,7 +10,7 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator,react,angular,vue,electron"
+    "yeoman-generator,react,angular,vue,electron,react-native,mini,flutter,scaffolding"
   ],
   "dependencies": {
     "yeoman-generator": "^2.0.0"
