@@ -46,7 +46,7 @@ npm link
 ```
 
 就会如下图所示的指引，根据指引一步步创建你的项目脚手架
-![step1](./imgs/demo1.png)
+![step1](./docs/imgs/demo1.png)
 
 ### 1.2 什么是yeoman
 
@@ -58,13 +58,13 @@ yeoman是一个脚手架工具，提供构建生态系统,可以设计丰富的�
 
 ### 1.3 yeman项目架构
 
-![yeoman-arch](./imgs/yeoman-arch.jpg)
+![yeoman-arch](./docs/imgs/yeoman-arch.jpg)
 
 ## 2. react-pc
 
 ### 2.1 架构图
 
-![react-arch](./imgs/react-arch.jpg)
+![react-arch](./docs/imgs/react-arch.jpg)
 
 ### 2.2 技术选型
 
