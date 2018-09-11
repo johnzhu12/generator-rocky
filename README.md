@@ -1,11 +1,11 @@
 
-# yeoman-gens
+# generator-rocky
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-* [yeoman-gens](#yeoman-gens)
+* [generator-rocky](#generator-rocky)
 	* [1.项目介绍](#1项目介绍)
 		* [1.1 如何使用](#11-如何使用)
 		* [1.2 什么是yeoman](#12-什么是yeoman)
