@@ -27,6 +27,7 @@
 ## 1.项目介绍
 
 使用yeoman生成的一个脚手架工具，包含一些基础web项目的搭建和模板。
+比如web的angular,vue,react版本,elctron，RN，小程序，flutter
 
 ### 1.1 如何使用
 
