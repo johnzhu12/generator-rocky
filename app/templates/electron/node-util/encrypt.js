@@ -1,63 +1,42 @@
 
 const jsSHA = require("jssha");
-
 var EC = require('elliptic').ec;
 var ec = new EC('p256');  // p256
+var bitcore = require('bitcore-lib');
+let PrivateKey = bitcore.PrivateKey;
+const ecdh = require('./ecdh')
 
 
 
 
-var key = ec.genKeyPair();
-
-var pubPoint = key.getPublic();
-
-var pub = pubPoint.encode('hex');
-
-var byteArr = Buffer.from(pub, 'hex')
-let pubBase64 = new Buffer(byteArr).toString('base64');
-
-// console.log('pub', pub)
-console.log('公钥', pubBase64)
 
 
-//=========
-var EdDSA = require('elliptic').eddsa;
+getPubPriv = function () {
+    var key1 = ec.genKeyPair();
+    var pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I='
+
+    var key2 = ec.keyFromPublic(ecdh.base64ToHex(pub), 'hex');
+    var shared1 = key1.derive(key2.getPublic())
+    console.log(ecdh.hexToBase64(shared1.toString(16)));
+    console.log('result', getbase64str(key1.getPublic()));
 
 
-// Create and initialize EdDSA context
-// (better do it once and reuse it)
+}
+getbase64str = function (P) {
+    let base64Str = new Buffer(Buffer.from(P.encode('hex'), 'hex')).toString('base64');
+    return base64Str;
+}
+getPubPriv()
 
-
-// Create key pair from secret
-// var key = ec.keyFromSecret(A.getPrivate()); // hex string, array or Buffer
-
-// Sign the message's hash (input must be an array, or a hex-string)
-const name = '朱佳勇'
-var shaObj = new jsSHA("SHA-384", "TEXT");
-shaObj.update(name);
-
-
-var msgHash = shaObj.getHash("HEX");
-var signature = key.sign(msgHash);
-
-// Export DER encoded signature in Array
-var derSign = signature.toDER();
-
-let derSignBase64 = new Buffer(derSign).toString('base64');
-
-// Verify signature
-console.log('derSignBase64:', derSignBase64);
-
-console.log(key.verify(msgHash, derSign));
-
-// CHECK WITH NO PRIVATE KEY
-
-// Import public key
-// var pub = '0a1af638...';
-// var key = ec.keyFromPublic(pub, 'hex');
-
-// Verify signature
-// var signature = '70bed1...';
-// console.log(key.verify(msgHash, signature));
+// const name = '朱佳勇'
+// var shaObj = new jsSHA("SHA-384", "TEXT");
+// shaObj.update(name);
+// var msgHash = shaObj.getHash("HEX");
+// var signature = key.sign(msgHash);
+// // Export DER encoded signature in Array
+// var derSign = signature.toDER();
+// let derSignBase64 = new Buffer(derSign).toString('base64');
+// console.log('derSignBase64:', derSignBase64);
+// console.log(key.verify(msgHash, derSign));
 
 
