@@ -90,7 +90,7 @@ module.exports = class extends Generator {
                 this.spawnCommandSync('osascript', ['-e', 'tell application "Terminal" to do script "echo newTerminal!"']) //osx打开新terminal跑脚本
                 this.log('this.destinationRoot', this.destinationRoot())
                 this.spawnCommandSync('cd', [this.destinationRoot()])
-                this.spawnCommandSync('electron', ['.']);
+                this.spawnCommandSync('./node_modules/.bin/electron', ['.']);  //这里直接跑‘electron .’要全局安装了electron
             }, 10000)   //这里待优化
 
         }

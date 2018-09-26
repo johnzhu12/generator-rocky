@@ -4,7 +4,8 @@ const path = require('path')
 const url = require('url')
 const pkg = require('./package.json') // 引用package.json
 const fileAction = require('./node-util/fileAction')
-const nodeAES = require('./node-util/lib/nodeAES')
+const ende = require('./node-util/ende')
+const ecdh = require('./node-util/ecdh')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -72,5 +73,5 @@ app.on('activate', function () {
 
 //node方法全局暴露
 global.fileAction = fileAction
-global.nodeAES = nodeAES
-console.log('fileAction', global.fileAction)
+global.ende = ende
+global.ecdh = ecdh

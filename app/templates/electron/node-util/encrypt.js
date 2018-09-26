@@ -16,8 +16,8 @@ var pub = pubPoint.encode('hex');
 var byteArr = Buffer.from(pub, 'hex')
 let pubBase64 = new Buffer(byteArr).toString('base64');
 
-console.log('pub', pub)
-console.log('公钥1', pubBase64)
+// console.log('pub', pub)
+console.log('公钥', pubBase64)
 
 
 //=========

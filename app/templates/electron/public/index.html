@@ -48,7 +48,8 @@
     try {
       App.electron = require('electron')
       App.fileAction = App.electron.remote.getGlobal('fileAction')
-      App.nodeAES = App.electron.remote.getGlobal('nodeAES')
+      App.ende = App.electron.remote.getGlobal('ende')
+      App.ecdh = App.electron.remote.getGlobal('ecdh')
     } catch (e) {
 
     }

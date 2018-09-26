@@ -47,7 +47,7 @@ class Biz extends React.Component<{}, {}>{
 
                 this.base64String = e.target['result'];
 
-                console.log('我是result', this.base64String)
+                // console.log('我是result', this.base64String)
 
             };
 
@@ -60,7 +60,9 @@ class Biz extends React.Component<{}, {}>{
     }
     //加密
     encryptAES() {
-        App.encrypt()
+        var pubKey = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I='
+        App.ecdh.generateCypher()
+        App.ende.aesEncryptForJava('', this.base64String)
     }
     decryptAES() {
 
