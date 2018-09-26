@@ -5,6 +5,7 @@ declare var App: any;
 
 class Biz extends React.Component<{}, {}>{
     base64String: string;
+    base64String2: string;
     constructor(props) {
         super(props)
     }
@@ -45,38 +46,44 @@ class Biz extends React.Component<{}, {}>{
             var fr = new FileReader();
             fr.onloadend = (e) => {
 
-                this.base64String = e.target['result'];
+                this.base64String2 = e.target['result'].split('base64,')[1];
 
                 // console.log('我是result', this.base64String)
 
             };
 
             // fr.readAsBinaryString(file)
-            fr.readAsArrayBuffer(file)
-            // fr.readAsDataURL(file);
+            // fr.readAsArrayBuffer(file)
+            fr.readAsDataURL(file);
+            // fr.readAsText(file)
         } else {
             alert("请使用高版本浏览器！");
         }
     }
     //加密
     encryptAES() {
-        var pubKey = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I='
-        App.ecdh.generateCypher()
-        App.ende.aesEncryptForJava('', this.base64String)
+        App.encrypt.encryptByECC(this.base64String2, function (toStorePair) {
+            if (toStorePair) {
+                localStorage.setItem('keyPair', JSON.stringify(toStorePair))
+            }
+        })
+
     }
     decryptAES() {
-
+        let keyPair = JSON.parse(localStorage.getItem('keyPair'));
+        var enc = 'ShjJCDuTbgdXlSpdnTS1V/3OW2/+BWyHzjeRyRbw7+Y='
+        App.encrypt.decryptByECC(enc, keyPair)
     }
     render() {
         return (
             <div>
-                <div>
+                {/* <div>
                     <input type="file" className="upload" accept="application/pdf" onChange={this.uploadfile1.bind(this)} />
 
                     <button onClick={this.createPdf.bind(this)}>创建pdf</button>
-                </div>
+                </div> */}
                 <div style={{ marginTop: '20px' }}>
-                    <input type="file" className="upload" accept="application/pdf" onChange={this.uploadfile2.bind(this)} />
+                    <input type="file" className="upload" onChange={this.uploadfile2.bind(this)} />
 
                     <button onClick={this.encryptAES.bind(this)}>AES加密</button>
                     <button onClick={this.decryptAES.bind(this)}>AES解密</button>
