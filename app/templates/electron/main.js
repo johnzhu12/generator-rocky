@@ -4,6 +4,7 @@ const path = require('path')
 const url = require('url')
 const pkg = require('./package.json') // 引用package.json
 const fileAction = require('./node-util/fileAction')
+const nodeAES = require('./node-util/lib/nodeAES')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -69,5 +70,7 @@ app.on('activate', function () {
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+//node方法全局暴露
 global.fileAction = fileAction
+global.nodeAES = nodeAES
 console.log('fileAction', global.fileAction)
