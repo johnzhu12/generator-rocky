@@ -6,6 +6,7 @@ declare var App: any;
 class Biz extends React.Component<{}, {}>{
     base64String: string;
     base64String2: string;
+    textStr
     constructor(props) {
         super(props)
     }
@@ -60,6 +61,25 @@ class Biz extends React.Component<{}, {}>{
             alert("请使用高版本浏览器！");
         }
     }
+    uploadfile3 = function (e) {
+        var file = e.currentTarget.files[0];
+        //读取文件
+        if (window['FileReader']) {
+            var fr = new FileReader();
+            fr.onloadend = (e) => {
+
+                this.textStr = e.target['result'];
+
+            };
+
+            // fr.readAsBinaryString(file)
+            // fr.readAsArrayBuffer(file)
+            // fr.readAsDataURL(file);
+            fr.readAsText(file)
+        } else {
+            alert("请使用高版本浏览器！");
+        }
+    }
     //加密
     encryptAES() {
         App.encrypt.encryptByECC(this.base64String2, function (toStorePair) {
@@ -71,8 +91,8 @@ class Biz extends React.Component<{}, {}>{
     }
     decryptAES() {
         let keyPair = JSON.parse(localStorage.getItem('keyPair'));
-        var enc = 'ShjJCDuTbgdXlSpdnTS1V/3OW2/+BWyHzjeRyRbw7+Y='
-        App.encrypt.decryptByECC(enc, keyPair)
+
+        App.encrypt.decryptByECC(this.textStr, keyPair)
     }
     render() {
         return (
@@ -83,8 +103,8 @@ class Biz extends React.Component<{}, {}>{
                     <button onClick={this.createPdf.bind(this)}>创建pdf</button>
                 </div> */}
                 <div style={{ marginTop: '20px' }}>
-                    <input type="file" className="upload" onChange={this.uploadfile2.bind(this)} />
-
+                    <input type="file" className="upload" accept="application/pdf" onChange={this.uploadfile2.bind(this)} />
+                    <input type="file" className="upload" accept="application/text" onChange={this.uploadfile3.bind(this)} />
                     <button onClick={this.encryptAES.bind(this)}>AES加密</button>
                     <button onClick={this.decryptAES.bind(this)}>AES解密</button>
                 </div>

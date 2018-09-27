@@ -226,5 +226,6 @@ module.exports = {
     backupFile,
     getGroupConf,
     writeApiReqLog,
-    downLoadCsv
+    downLoadCsv,
+    generatePdf
 }

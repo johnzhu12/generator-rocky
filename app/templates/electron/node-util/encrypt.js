@@ -15,20 +15,22 @@ getbase64str = function (P) {
     let base64Str = new Buffer(Buffer.from(P.encode('hex'), 'hex')).toString('base64');
     return base64Str;
 }
-
+getkey2 = function () { //后端返回的key2
+    pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I=' //后端给我的公钥
+    var key2 = ec.keyFromPublic(ecdh.base64ToHex(pub), 'hex');
+    return key2
+}
 getCypher = function (key1, key2) {
     var shared = key1.derive(key2.getPublic())
     console.log('cypher:', ecdh.hexToBase64(shared.toString(16)));
-    return shared
+    return shared.toBuffer({ size: 32 });
 }
 // getCypher();
-
 getRadomKeyPair = function (pub) {
     var key = ec.genKeyPair();
     return key;
 }
 getPriPubKeys = function (key) {
-    // console.log(ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString()))
     let result = {
         publicKey: getbase64str(key.getPublic()),
         privateKey: ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString())
@@ -44,7 +46,7 @@ encryptByECC = function (data, callback) {
     let toStorePair = getPriPubKeys(key1);
     callback(toStorePair); //保存公私钥
     var shared = getCypher(key1, key2)
-    let result = ecdh.hexToBase64(ecdh.encrypt(data, shared.toBuffer({ size: 32 })).toString('hex'))
+    let result = ecdh.hexToBase64(ecdh.encrypt(data, shared).toString('hex'))
     // console.log('密文:', result)
     fileAction.backupFile('/Users/zhujohn/Desktop/a.text', result, function (flag) {
         if (flag) {
@@ -54,11 +56,7 @@ encryptByECC = function (data, callback) {
         }
     })
 }
-getkey2 = function () { //后端返回的key2
-    pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I=' //后端给我的公钥
-    var key2 = ec.keyFromPublic(ecdh.base64ToHex(pub), 'hex');
-    return key2
-}
+
 //解密
 decryptByECC = function (encryptedData, keyPair) {
     var key2 = getkey2()
@@ -66,19 +64,17 @@ decryptByECC = function (encryptedData, keyPair) {
     //根据公钥获得完整key
     try {
         let hexStr = ecdh.base64ToHex(keyPair.privateKey)
-        console.log('hexStr', hexStr)
-        // let ec = new EdDSA('ed25519');
-        console.log('ec.keyFromPrivate', ec.keyFromPrivate)
         var key1 = ec.keyFromPrivate(hexStr, 'hex'); // hex string, array or Buffer
     } catch (e) {
         console.log('error:', e)
     }
-
-    console.log('走了2！');
     var shared = getCypher(key1, key2)
-    let result = ecdh.hexToBase64(ecdh.decrypt(encryptedData, shared.toBuffer({ size: 32 })).toString('hex'))
+
+    var encrypted = Buffer(encryptedData, 'base64')
+    // let result = ecdh.hexToBase64(ecdh.decrypt(encrypted, shared).toString('hex'))
+    let result = ecdh.decrypt(encrypted, shared)
     // console.log('密文:', result)
-    fileAction.backupFile('/Users/zhujohn/Desktop/a.pdf', result, function (flag) {
+    fileAction.generatePdf(result, '/Users/zhujohn/Desktop/a.pdf', function (flag) {
         if (flag) {
             console.log('保存成功');
         } else {
