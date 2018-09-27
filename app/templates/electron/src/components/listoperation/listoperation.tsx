@@ -104,8 +104,14 @@ class Biz extends React.Component<{}, {}>{
                 </div> */}
                 <div style={{ marginTop: '20px' }}>
                     <input type="file" className="upload" accept="application/pdf" onChange={this.uploadfile2.bind(this)} />
-                    <input type="file" className="upload" accept="application/text" onChange={this.uploadfile3.bind(this)} />
+
                     <button onClick={this.encryptAES.bind(this)}>AES加密</button>
+
+                </div>
+                <div style={{ marginTop: '20px' }}>
+
+                    <input type="file" className="upload" accept="application/text" onChange={this.uploadfile3.bind(this)} />
+
                     <button onClick={this.decryptAES.bind(this)}>AES解密</button>
                 </div>
             </div>
