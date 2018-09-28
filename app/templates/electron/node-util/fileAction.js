@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const ende = require('./ende.js');
 const dialog = require('electron').dialog;
-const Json2csvParser = require('json2csv').Parser;
+// const json2csv = require('json2csv')
 const iconv = require('iconv-lite');
 var base64 = require('file-base64');
 
@@ -163,38 +163,37 @@ function writeApiReqLog(content) {
 }
 
 //之前的导出csv方法
-function downLoadCsv(defaultname, fields, dataList, callback) {
-    let defaultpath = process.cwd() + '/' + defaultname + '.csv';
-    //name,postfix
-    dialog.showSaveDialog({
-        defaultPath: defaultpath,
-        properties: [
-            'openFile',
-        ],
-        filters: [{
-            name: '',
-            extensions: ['csv']
-        },]
-    }, function (res) {
-        if (res) {
-            res = res.replace(/\\/g, "\/");
-            const fs = require('fs');
-            const Json2csvParser = require('json2csv').Parser;
-            const transformOpts = {
-                highWaterMark: 16384,
-                encoding: 'utf-8'
-            };
-            const json2csvParser = new Json2csvParser({
-                fields
-            }, transformOpts);
+// function downLoadCsv(defaultname, fields, dataList, callback) {
+//     let defaultpath = process.cwd() + '/' + defaultname + '.csv';
+//     //name,postfix
+//     dialog.showSaveDialog({
+//         defaultPath: defaultpath,
+//         properties: [
+//             'openFile',
+//         ],
+//         filters: [{
+//             name: '',
+//             extensions: ['csv']
+//         },]
+//     }, function (res) {
+//         if (res) {
+//             res = res.replace(/\\/g, "\/");
+//             const Json2csvParser = json2csv.Parser;
+//             const transformOpts = {
+//                 highWaterMark: 16384,
+//                 encoding: 'utf-8'
+//             };
+//             const json2csvParser = new Json2csvParser({
+//                 fields
+//             }, transformOpts);
 
-            let csvStr = json2csvParser.parse(dataList);
-            csvStr = iconv.encode(csvStr, 'gb2312');
-            fs.writeFileSync(res, csvStr);
-            if (typeof callback === 'function') callback(true);
-        }
-    });
-}
+//             let csvStr = json2csvParser.parse(dataList);
+//             csvStr = iconv.encode(csvStr, 'gb2312');
+//             fs.writeFileSync(res, csvStr);
+//             if (typeof callback === 'function') callback(true);
+//         }
+//     });
+// }
 
 function generatePdf(base64Str, defaultPathFileName, callback) {
     // console.log('base64Str', base64Str)
@@ -226,6 +225,6 @@ module.exports = {
     backupFile,
     getGroupConf,
     writeApiReqLog,
-    downLoadCsv,
+    // downLoadCsv,
     generatePdf
 }

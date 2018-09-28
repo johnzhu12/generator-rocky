@@ -22,6 +22,7 @@
     "ethereumjs-wallet": "^0.6.2",
     "file-base64": "^1.0.0",
     "json2csv": "^4.2.1",
+    "jssha": "^2.3.1",
     "keccak": "^1.4.0",
     "mobx": "^5.0.3",
     "mobx-react": "^5.2.3",

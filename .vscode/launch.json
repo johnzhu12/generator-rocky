@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/app/templates/electron/node-util/encrypt.js"
+            "program": "${workspaceFolder}/app/templates/electron/node-util/fileAction.js"
         },
         {
             "name": "Debug Main Process",

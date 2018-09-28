@@ -1,4 +1,3 @@
-
 const jsSHA = require("jssha");
 var EC = require('elliptic').ec;
 var ec = new EC('p256');  // p256
