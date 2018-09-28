@@ -21,8 +21,9 @@ function createWindow() {
     if (pkg.DEV) {
         mainWindow.loadURL("http://localhost:3000/")
     } else {
+        // console.log(path.join(__dirname, '/build/index.html'))
         mainWindow.loadURL(url.format({
-            pathname: path.join(__dirname, './build/index.html'),
+            pathname: path.join(__dirname, '/build/index.html'),
             protocol: 'file:',
             slashes: true
         }))

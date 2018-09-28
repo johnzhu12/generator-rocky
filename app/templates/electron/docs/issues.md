@@ -1,0 +1,1 @@
+1.homepage 需要设置为".",不然在build时候,js或者css引用路径不对 [issue-165](https://github.com/facebook/create-react-app/issues/165)
