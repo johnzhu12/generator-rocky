@@ -1,6 +1,7 @@
 #added by john
 .DS_Store
 dist
+build
 # Logs
 logs
 *.log

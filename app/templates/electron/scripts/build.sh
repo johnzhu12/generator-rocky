@@ -17,6 +17,9 @@ fi
 PLATFORM=$1
 ARCH=$2
 
+echo "Start build web"
+npm run build 
+
 echo "Start packaging for $PLATFORM $ARCH."
 
 if [ $PLATFORM = "linux" ]; then
