@@ -44,13 +44,13 @@ param privKeyData, type: hex key string
 param text, type string
 return base64
 **/
-function signByPriv(privKeyData, text) {
+function deprecated_signByPriv(privKeyData, text) {
     privKeyData = ecdh.base64ToHex(privKeyData);
     let sig = ecdh.sign(text, privKeyData);
     var fullRet = {};
-	fullRet.r = sig.signature.slice(0, 32).toString('base64');
-	fullRet.s = sig.signature.slice(32, 64).toString('base64');
-	fullRet.v = sig.recovery + 27;
+    fullRet.r = sig.signature.slice(0, 32).toString('base64');
+    fullRet.s = sig.signature.slice(32, 64).toString('base64');
+    fullRet.v = sig.recovery + 27;
     var resultJSON = JSON.stringify(fullRet);
 
     // r + s + v
@@ -65,15 +65,15 @@ param text, type string
 param signatureBase64 
 return boolean
 **/
-function verifySign(pubKeyData, text, signatureBase64) {
+function deprecated_verifySign(pubKeyData, text, signatureBase64) {
     pubKeyData = ecdh.base64ToHex(pubKeyData);
-        // r + s + v
+    // r + s + v
     // let signatureHex = ecdh.base64ToHex(signatureBase64).slice(0,128);
     var resultObj = JSON.parse(signatureBase64);
-	var sig = Buffer(resultObj.r, 'base64').toString('hex') + Buffer(resultObj.s, 'base64').toString('hex');
+    var sig = Buffer(resultObj.r, 'base64').toString('hex') + Buffer(resultObj.s, 'base64').toString('hex');
     // let signatureBuf = Buffer(signatureHex, 'hex');
     text = ecdh.hashMessage(text);
-    return ecdh.verify(text,sig,pubKeyData);
+    return ecdh.verify(text, sig, pubKeyData);
 }
 
 /* 
@@ -81,11 +81,11 @@ param  pubKeyData,  type:hex key string
 param  text, string
 return base64
 */
-function enByPubkey(pubKeyData,privKeyData, text) {
+function deprecated_enByPubkey(pubKeyData, privKeyData, text) {
     pubKeyData = ecdh.base64ToHex(pubKeyData);
     privKeyData = ecdh.base64ToHex(privKeyData);
     let cypher = ecdh.generateCypher(privKeyData, pubKeyData);
-    if(typeof text === 'object'){
+    if (typeof text === 'object') {
         text = JSON.stringify(text);
     }
     let result = ecdh.hexToBase64(ecdh.encrypt(text, cypher).toString('hex'));
@@ -97,7 +97,7 @@ param  privKeyData,  type:hex key string,
 param  encrypted, type base64
 return string
 */
-function deByPrivKey(privKeyData, publicKeyData, encrypted) {
+function deprecated_deByPrivKey(privKeyData, publicKeyData, encrypted) {
     publicKeyData = ecdh.base64ToHex(publicKeyData);
     privKeyData = ecdh.base64ToHex(privKeyData);
     encrypted = Buffer(encrypted, 'base64');
@@ -112,12 +112,12 @@ function deByPrivKey(privKeyData, publicKeyData, encrypted) {
 将解密动作放electron主进程里，解密完异步通知渲染进程更新页面
 解决页面卡死问题
 */
-function decryptList(params){
-    let {privKey,keys,encryptList} = JSON.parse(params);
-    let dataList = encryptList.map(item=>{
-        return deByPrivKey(privKey,keys[item.pubKeyIndex],item.encryptData);
+function decryptList(params) {
+    let { privKey, keys, encryptList } = JSON.parse(params);
+    let dataList = encryptList.map(item => {
+        return deByPrivKey(privKey, keys[item.pubKeyIndex], item.encryptData);
     });
-    let targetDataStr = JSON.stringify({list:dataList,callbackName:params.callbackName});
+    let targetDataStr = JSON.stringify({ list: dataList, callbackName: params.callbackName });
     return targetDataStr;
 }
 
@@ -140,19 +140,19 @@ function aesDecrypt(keyData, enResult) {
 
 function genBrief(text, random) {
     let newText = text;
-    if(random){
+    if (random) {
         newText = random ? JSON.stringify({
             text: text,
             random: random
         }) : text;
-    }else{
-        try{
+    } else {
+        try {
             let textJson = null;
-            if(typeof text === 'string'){
+            if (typeof text === 'string') {
                 textJson = JSON.parse(text);
             }
             let newSortArr = getSortArr(textJson);
-        }catch(e){
+        } catch (e) {
             newText = text;
         }
     }
@@ -161,22 +161,22 @@ function genBrief(text, random) {
     return sha256Sum.digest('hex');
 }
 
-function getSortArr(jsonObj){
-    let iteratEntry,iteratArr,iteratObj,transToStr;
+function getSortArr(jsonObj) {
+    let iteratEntry, iteratArr, iteratObj, transToStr;
 
-    transToStr = (item)=>{
+    transToStr = (item) => {
         let str = item;
-        if(Object.prototype.toString.call(item) === '[object Array]'){
+        if (Object.prototype.toString.call(item) === '[object Array]') {
             str = JSON.stringify(str);
-        }else if(typeof item === 'number'){
+        } else if (typeof item === 'number') {
             str = item + '';
         }
         return str;
     }
 
-    iteratArr = (arr)=>{
+    iteratArr = (arr) => {
         let newArr = [];
-        arr.map(item=>{
+        arr.map(item => {
             let str = iteratEntry(item);
             str = transToStr(str);
             newArr.push(str);
@@ -186,29 +186,29 @@ function getSortArr(jsonObj){
         return newArr.sort();
     }
 
-    iteratObj = (obj)=>{
+    iteratObj = (obj) => {
         let newArr = [];
-        for(let k in obj){
+        for (let k in obj) {
             newArr.push(iteratEntry(obj[k]));
         }
         return newArr.sort();
     }
 
-    iteratEntry = (jsonObj)=>{
-        if(Object.prototype.toString.call(jsonObj) === '[object Array]'){
+    iteratEntry = (jsonObj) => {
+        if (Object.prototype.toString.call(jsonObj) === '[object Array]') {
             return iteratArr(jsonObj);
-        }else if(Object.prototype.toString.call(jsonObj) === '[object Object]'){
+        } else if (Object.prototype.toString.call(jsonObj) === '[object Object]') {
             return iteratObj(jsonObj);
-        }else{
+        } else {
             return jsonObj;
         }
     }
-    if(typeof jsonObj === 'string'){
+    if (typeof jsonObj === 'string') {
         return jsonObj;
-    }else{
+    } else {
         let lastArr = iteratEntry(jsonObj);
         let newArr = [];
-        lastArr.map(item=>{
+        lastArr.map(item => {
             item = transToStr(item);
             newArr.push(item)
         })
@@ -235,9 +235,9 @@ function fotTest() {
     console.log('verifySignResult=' + verifySignResult2);
 
     let keyEnDeText = '把我加密';
-    let pubKeyEnResult = enByPubkey(keyJson.pubKey,keyJson.privKey, keyEnDeText);
+    let pubKeyEnResult = enByPubkey(keyJson.pubKey, keyJson.privKey, keyEnDeText);
     console.log('pubKeyEnResult=' + pubKeyEnResult);
-    let privkeydeResult = deByPrivKey(keyJson.privKey,keyJson.pubKey, pubKeyEnResult);
+    let privkeydeResult = deByPrivKey(keyJson.privKey, keyJson.pubKey, pubKeyEnResult);
     console.log('privkeydeResult=' + privkeydeResult);
 
     let aesText = '对称加密';
@@ -321,30 +321,30 @@ function findInJSONFile() {
  * aes加密 
  * @param data 
  * @param secretKey 
- */  
-function aesEncryptForJava(secretKey,data) {  
-    var cipher = crypto.createCipher('aes-128-ecb',secretKey);  
-    return cipher.update(data,'utf8','hex') + cipher.final('hex');  
-}  
+ */
+function aesEncryptForJava(secretKey, data) {
+    var cipher = crypto.createCipher('aes-128-ecb', secretKey);
+    return cipher.update(data, 'utf8', 'hex') + cipher.final('hex');
+}
 
 /** 
  * aes解密 
  * @param data 
  * @param secretKey 
  * @returns {*} 
- */  
-function aesDecryptForJava(secretKey,data) {  
-    var cipher = crypto.createDecipher('aes-128-ecb',secretKey);  
-    return cipher.update(data,'hex','utf8') + cipher.final('utf8');  
+ */
+function aesDecryptForJava(secretKey, data) {
+    var cipher = crypto.createDecipher('aes-128-ecb', secretKey);
+    return cipher.update(data, 'hex', 'utf8') + cipher.final('utf8');
 }
 
 
 module.exports = {
     createPairKeys,
-    signByPriv,
-    verifySign,
-    enByPubkey,
-    deByPrivKey,
+    deprecated_signByPriv,
+    deprecated_verifySign,
+    deprecated_enByPubkey,
+    deprecated_deByPrivKey,
     decryptList,
     dencryptData,
     aesEncrypt,
