@@ -132,7 +132,6 @@ verifySign = function (pubKeyData, msgHash, derSign) {
 // }
 // console.log('测试成功！');
 module.exports = {
-    encryptByECC,
-    decryptByECC
+    enByPubkey
 }
 

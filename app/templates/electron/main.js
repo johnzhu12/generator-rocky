@@ -7,6 +7,7 @@ const fileAction = require('./node-util/fileAction')
 const ende = require('./node-util/ende')
 const ecdh = require('./node-util/ecdh')
 const encrypt = require('./node-util/encrypt')
+// const { requireTaskPool } = require('electron-remote')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
