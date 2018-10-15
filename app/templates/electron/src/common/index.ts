@@ -1,13 +1,14 @@
 import ajax from './ajax/request'
+import until from './utils/index'
 
 
 
 
 
-
-let deposit = {
-    ajax
+let common = {
+    ajax,
+    until
 }
 
 
-export default deposit;
+export default common;

@@ -338,7 +338,11 @@ function aesDecryptForJava(secretKey, data) {
     return cipher.update(data, 'hex', 'utf8') + cipher.final('utf8');
 }
 
-
+//added by john
+function aesEncrypt() {
+    var cipher = crypto.createCipher('aes-128-ecb', secretKey);
+    return cipher.update(data, 'utf8', 'hex') + cipher.final('hex');
+}
 module.exports = {
     createPairKeys,
     deprecated_signByPriv,

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="continus()">继续</button>
+</body>
+<script>
+    function continus() {
+        //创建异步对象  
+        var xhr = new XMLHttpRequest();
+        //设置请求的类型及url
+        //post请求一定要添加请求头才行不然会报错
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.open('post', url);
+        //发送请求
+        xhr.send();
+        xhr.onreadystatechange = function () {
+            // 这步为判断服务器是否正确响应
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                console.log(xhr.responseText);
+            }
+        };
+    }
+</script>
+
+</html>

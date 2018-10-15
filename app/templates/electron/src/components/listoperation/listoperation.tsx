@@ -1,4 +1,6 @@
 import * as React from 'react'
+import common from '@common/index'
+const BN = require('bn.js')
 declare var App: any;
 
 
@@ -61,38 +63,58 @@ class Biz extends React.Component<{}, {}>{
             alert("请使用高版本浏览器！");
         }
     }
-    uploadfile3 = function (e) {
-        var file = e.currentTarget.files[0];
-        //读取文件
-        if (window['FileReader']) {
-            var fr = new FileReader();
-            fr.onloadend = (e) => {
+    // uploadfile3 = function (e) {
+    //     var file = e.currentTarget.files[0];
+    //     //读取文件
+    //     if (window['FileReader']) {
+    //         var fr = new FileReader();
+    //         fr.onloadend = (e) => {
 
-                this.textStr = e.target['result'];
+    //             this.textStr = e.target['result'];
 
-            };
+    //         };
 
-            // fr.readAsBinaryString(file)
-            // fr.readAsArrayBuffer(file)
-            // fr.readAsDataURL(file);
-            fr.readAsText(file)
-        } else {
-            alert("请使用高版本浏览器！");
-        }
-    }
+    //         // fr.readAsBinaryString(file)
+    //         // fr.readAsArrayBuffer(file)
+    //         // fr.readAsDataURL(file);
+    //         fr.readAsText(file)
+    //     } else {
+    //         alert("请使用高版本浏览器！");
+    //     }
+    // }
     //加密
-    encryptAES() {
-        App.encrypt.encryptByECC(this.base64String2, function (toStorePair) {
-            if (toStorePair) {
-                localStorage.setItem('keyPair', JSON.stringify(toStorePair))
+    enByPubkey() {
+        let pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I=' //后端给我的公钥
+        let base64Str = this.base64String2;
+        let key = App.encrypt.getRadomKeyPair(); //生成的随机key
+        let keyObj = App.encrypt.getPriPubKeys(key);
+        localStorage.setItem('keyPair', JSON.stringify(keyObj)) //存储key
+
+        let myAesKey = common.until.getRadomKey() //生成的32位加密key
+        // let encryptedStr = App.ende.aesEncryptForJava(myAesKey, base64Str); //文件内容对称加密;
+        let S = (new BN(myAesKey, 16)).toBuffer({ size: 32 })
+        let encryptedStr = App.ecdh.encrypt(base64Str, S);
+        // let encryptedBase64Str = App.ecdh.hexToBase64(encryptedStr) //转成base64
+        let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privateKey, myAesKey) //对key进行非对称加密
+
+        let Obj = {
+            pubKey: keyObj.publicKey,
+            content: encryptedStr,
+            keyEnc: keyEnc
+        }
+        App.fileAction.backupFile('/Users/zhujohn/Desktop/1.text', JSON.stringify(Obj), function (flag) {
+            if (flag) {
+                console.log('保存成功');
+            } else {
+                console.log('失败');
             }
         })
 
     }
-    decryptAES() {
+    deByPrivKey(encrypted) {
         let keyPair = JSON.parse(localStorage.getItem('keyPair'));
 
-        App.encrypt.decryptByECC(this.textStr, keyPair)
+        App.encrypt.deByPrivKey(keyPair.privateKey, keyPair.privateKey, encrypted)
     }
     render() {
         return (
@@ -105,15 +127,15 @@ class Biz extends React.Component<{}, {}>{
                 <div style={{ marginTop: '20px' }}>
                     <input type="file" className="upload" accept="application/pdf" onChange={this.uploadfile2.bind(this)} />
 
-                    <button onClick={this.encryptAES.bind(this)}>AES加密</button>
+                    <button onClick={this.enByPubkey.bind(this)}>AES加密</button>
 
                 </div>
-                <div style={{ marginTop: '20px' }}>
+                {/* <div style={{ marginTop: '20px' }}>
 
                     <input type="file" className="upload" accept="application/text" onChange={this.uploadfile3.bind(this)} />
 
-                    <button onClick={this.decryptAES.bind(this)}>AES解密</button>
-                </div>
+                    <button onClick={this.deByPrivKey.bind(this)}>AES解密</button>
+                </div> */}
             </div>
         )
     }
