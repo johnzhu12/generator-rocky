@@ -1,6 +1,5 @@
 import * as React from 'react'
 import common from '@common/index'
-const BN = require('bn.js')
 declare var App: any;
 
 
@@ -91,11 +90,15 @@ class Biz extends React.Component<{}, {}>{
         localStorage.setItem('keyPair', JSON.stringify(keyObj)) //存储key
 
         let myAesKey = common.until.getRadomKey() //生成的32位加密key
+
         // let encryptedStr = App.ende.aesEncryptForJava(myAesKey, base64Str); //文件内容对称加密;
-        let S = (new BN(myAesKey, 16)).toBuffer({ size: 32 })
-        let encryptedStr = App.ecdh.encrypt(base64Str, S);
+        let buffer = App.encrypt.strToBN(myAesKey)
+        let base64Bn = buffer.toString('base64')
+
+        let encryptedStr = App.ecdh.hexToBase64(App.ecdh.encrypt(base64Str, buffer).toString('hex'))
         // let encryptedBase64Str = App.ecdh.hexToBase64(encryptedStr) //转成base64
-        let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privateKey, myAesKey) //对key进行非对称加密
+        let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privateKey, base64Bn) //对key进行非对称加密
+        console.log('base64Bn', base64Bn)
 
         let Obj = {
             pubKey: keyObj.publicKey,

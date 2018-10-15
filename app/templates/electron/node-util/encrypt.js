@@ -2,7 +2,7 @@ const jsSHA = require("jssha");
 let EC = require('elliptic').ec;
 let bitcore = require('bitcore-lib');
 const ecdh = require('./ecdh');
-const BN = require('bn.js')
+const BN = bitcore.crypto.BN
 
 let PrivateKey = bitcore.PrivateKey;
 let ec = new EC('p256');  // p256
@@ -19,6 +19,12 @@ getkey2 = function () { //后端返回的key2
 getCypher = function (key1, key2) {
     let shared = key1.derive(key2.getPublic())
     return shared.toBuffer({ size: 32 });
+}
+//把字符串转成BN object
+strToBN = function (str) {
+    let hex = new Buffer(str, 'hex')
+    let buffer = BN.fromBuffer(hex).toBuffer({ size: 32 });
+    return buffer;
 }
 // getCypher();
 getRadomKeyPair = function (pub) {
@@ -137,6 +143,7 @@ module.exports = {
     signByPriv,
     verifySign,
     getRadomKeyPair,
-    getPriPubKeys
+    getPriPubKeys,
+    strToBN
 }
 
