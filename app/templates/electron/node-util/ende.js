@@ -322,7 +322,7 @@ function findInJSONFile() {
  * @param data 
  * @param secretKey 
  */
-function aesEncryptForJava(secretKey, data) {
+function deprecated_aesEncryptForJava(secretKey, data) {
     var cipher = crypto.createCipher('aes-128-ecb', secretKey);
     return cipher.update(data, 'utf8', 'hex') + cipher.final('hex');
 }
@@ -333,15 +333,31 @@ function aesEncryptForJava(secretKey, data) {
  * @param secretKey 
  * @returns {*} 
  */
-function aesDecryptForJava(secretKey, data) {
+function deprecated_aesDecryptForJava(secretKey, data) {
     var cipher = crypto.createDecipher('aes-128-ecb', secretKey);
     return cipher.update(data, 'hex', 'utf8') + cipher.final('utf8');
 }
 
-//added by john
-function aesEncrypt() {
-    var cipher = crypto.createCipher('aes-128-ecb', secretKey);
-    return cipher.update(data, 'utf8', 'hex') + cipher.final('hex');
+//added by john,新的AES加密
+/**
+ * 
+ * 
+ * @param {any} base64Str 
+ * @param {any} cipher 
+ * @returns 
+ */
+function aesEncrypt(base64Str, cipher) {
+    return ecdh.hexToBase64(ecdh.encrypt(base64Str, cipher).toString('hex'))
+}
+/**
+ * 
+ * 
+ * @param {any} encryptedText 
+ * @param {buffer} cipher 
+ * @returns 
+ */
+function aesDecrypt(encryptedText, cipher) {
+    return ecdh.decrypt(new Buffer(encryptedText, 'base64'), cipher) //解密文件内容
 }
 module.exports = {
     createPairKeys,
@@ -361,6 +377,8 @@ module.exports = {
     deleteFsSy,
     writeFsSy,
     fs,
-    aesEncryptForJava,
-    aesDecryptForJava
+    deprecated_aesEncryptForJava,
+    deprecated_aesDecryptForJava,
+    aesEncrypt,
+    aesDecrypt
 }

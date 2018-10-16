@@ -90,14 +90,13 @@ class Biz extends React.Component<{}, {}>{
         let keyObj = App.encrypt.getPriPubKeys(key);
         localStorage.setItem('keyPair', JSON.stringify(keyObj)) //存储key
 
-        let myAesKey = common.until.getRadomKey() //生成的32位加密key
+        let myAesKey = common.until.getRadomKey() //生成的64位加密key
 
-        // let encryptedStr = App.ende.aesEncryptForJava(myAesKey, base64Str); //文件内容对称加密;
-        let buffer = App.encrypt.strToBNBuffer(myAesKey, 'hex')
-        let base64Bn = buffer.toString('base64')
+        let cipher = App.encrypt.strToBNBuffer(myAesKey, 'hex')  //转成bigNum buffer,和cipher类型一致
+        let base64Bn = cipher.toString('base64')  //转成base64格式
 
-        let encryptedStr = App.ecdh.hexToBase64(App.ecdh.encrypt(base64Str, buffer).toString('hex'))
-        // let encryptedBase64Str = App.ecdh.hexToBase64(encryptedStr) //转成base64
+        let encryptedStr = App.ende.aesEncrypt(base64Str, cipher)
+
         let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privateKey, base64Bn) //对key进行非对称加密
         let mykeyEnc = App.encrypt.enByPubkey(keyObj.publicKey, keyObj.privateKey, base64Bn) //抄送自己一份
         console.log('base64Bn', base64Bn)
@@ -124,11 +123,8 @@ class Biz extends React.Component<{}, {}>{
         let obj = JSON.parse(this.textStr)
         let base64Bn = App.encrypt.deByPrivKey(keyPair.privateKey, keyPair.publicKey, obj.mykeyEnc) //对key进行非对称解密
 
-        let buffer = App.encrypt.strToBNBuffer(base64Bn, 'base64')
-        let base64Str = App.ecdh.decrypt(new Buffer(obj.content, 'base64'), buffer)
-
-        console.log('base64Str', base64Str)
-        // let myAesKey
+        let cipher = App.encrypt.strToBNBuffer(base64Bn, 'base64') //转成buffer
+        let base64Str = App.ende.aesDecrypt(obj.content, cipher) //解密文件内容
 
         App.fileAction.generatePdf(base64Str, '/Users/johnzhu/Desktop/demo.pdf', (flag) => {
             if (flag) {
