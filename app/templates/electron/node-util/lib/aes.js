@@ -4,9 +4,9 @@ var bitcore = require('bitcore-lib');
 var $ = bitcore.util.preconditions;
 var aes = require('aes');
 
-var AES = function AES() {};
+var AES = function AES() { };
 
-AES.encrypt = function(messagebuf, keybuf) {
+AES.encrypt = function (messagebuf, keybuf) {
   var key = AES.buf2words(keybuf);
   var message = AES.buf2words(messagebuf);
   var a = new aes(key);
@@ -15,7 +15,7 @@ AES.encrypt = function(messagebuf, keybuf) {
   return encbuf;
 };
 
-AES.decrypt = function(encbuf, keybuf) {
+AES.decrypt = function (encbuf, keybuf) {
   var enc = AES.buf2words(encbuf);
   var key = AES.buf2words(keybuf);
   var a = new aes(key);
@@ -24,7 +24,7 @@ AES.decrypt = function(encbuf, keybuf) {
   return messagebuf;
 };
 
-AES.buf2words = function(buf) {
+AES.buf2words = function (buf) {
   $.checkArgument(buf);
   $.checkArgument(buf.length % 4 === 0, 'buf length must be a multiple of 4');
 
@@ -37,7 +37,7 @@ AES.buf2words = function(buf) {
   return words;
 };
 
-AES.words2buf = function(words) {
+AES.words2buf = function (words) {
   var buf = new Buffer(words.length * 4);
 
   for (var i = 0; i < words.length; i++) {

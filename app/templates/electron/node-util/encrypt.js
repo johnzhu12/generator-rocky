@@ -20,12 +20,13 @@ getCypher = function (key1, key2) {
     let shared = key1.derive(key2.getPublic())
     return shared.toBuffer({ size: 32 });
 }
-//把字符串转成BN object
-strToBN = function (str) {
-    let hex = new Buffer(str, 'hex')
-    let buffer = BN.fromBuffer(hex).toBuffer({ size: 32 });
-    return buffer;
+//把字符串转成BN buffer
+strToBNBuffer = function (str, encode) {
+    let encodeBuffer = new Buffer(str, encode)
+    let bnBuffer = BN.fromBuffer(encodeBuffer).toBuffer({ size: 32 });
+    return bnBuffer;
 }
+
 // getCypher();
 getRadomKeyPair = function (pub) {
     let key = ec.genKeyPair();
@@ -144,6 +145,6 @@ module.exports = {
     verifySign,
     getRadomKeyPair,
     getPriPubKeys,
-    strToBN
+    strToBNBuffer
 }
 
