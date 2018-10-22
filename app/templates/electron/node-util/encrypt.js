@@ -35,17 +35,25 @@ strToBNBuffer = function (str, encode) {
 }
 
 // getCypher();
-getRadomKeyPair = function (pub) {
+// getRadomKeyPair = function (pub) {
+//     let key = ec.genKeyPair();
+//     return key;
+// }
+// getPriPubKeys = function (key) {
+//     let result = {
+//         publicKey: getbase64str(key.getPublic()),
+//         privateKey: ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString())
+//     }
+//     // console.log('公钥:', result.publicKey);
+//     // console.log('私钥:', result.privateKey);
+//     return result;
+// }
+createPairKeys = function () {
     let key = ec.genKeyPair();
-    return key;
-}
-getPriPubKeys = function (key) {
     let result = {
         publicKey: getbase64str(key.getPublic()),
         privateKey: ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString())
     }
-    // console.log('公钥:', result.publicKey);
-    // console.log('私钥:', result.privateKey);
     return result;
 }
 // getPriPubKeys()
@@ -150,8 +158,9 @@ module.exports = {
     deByPrivKey,
     signByPriv,
     verifySign,
-    getRadomKeyPair,
-    getPriPubKeys,
+    // getRadomKeyPair,
+    // getPriPubKeys,
+    createPairKeys,
     strToBNBuffer
 }
 

@@ -33,7 +33,7 @@ class Biz extends React.Component<{}, {}>{
     //创建pdf
     createPdf() {
         let base64Str = this.base64String.split(';base64,').pop();
-        App.fileAction.generatePdf(base64Str, '/Users/johnzhu/Desktop/demo.pdf', (flag) => {
+        App.fileAction.generatePdf(base64Str, '/Users/johnzhu/Desktop/demo.jpg', (flag) => {
             if (flag) {
                 console.log('生成pdf成功！')
             } else {
@@ -86,8 +86,7 @@ class Biz extends React.Component<{}, {}>{
         // let pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I=' //后端给我的公钥
         let pub = 'BFv5WUi8bwb6EysL9ntmQPOV67mxT9Z/wMobOdDC3/VE56frGMgxYhlYUWngxIV94ME4WVouvmaAZqZiXZMrHqE='
         let base64Str = this.base64String2;
-        let key = App.encrypt.getRadomKeyPair(); //生成的随机key
-        let keyObj = App.encrypt.getPriPubKeys(key);
+        let keyObj = App.encrypt.createPairKeys();//生成的随机key
         localStorage.setItem('keyPair', JSON.stringify(keyObj)) //存储key
 
         let myAesKey = common.until.getRadomKey() //生成的64位加密key
@@ -107,13 +106,15 @@ class Biz extends React.Component<{}, {}>{
             keyEnc: keyEnc,
             mykeyEnc: mykeyEnc
         }
-        App.fileAction.backupFile('/Users/zhujohn/Desktop/1.text', JSON.stringify(Obj), function (flag) {
-            if (flag) {
-                console.log('保存成功');
-            } else {
-                console.log('失败');
-            }
-        })
+        // var form = new FormData()
+        // form.append(Obj)
+        // App.fileAction.backupFile('/Users/zhujohn/Desktop/1.text', JSON.stringify(Obj), function (flag) {
+        //     if (flag) {
+        //         console.log('保存成功');
+        //     } else {
+        //         console.log('失败');
+        //     }
+        // })
 
     }
     //解密
@@ -126,7 +127,7 @@ class Biz extends React.Component<{}, {}>{
         let cipher = App.encrypt.strToBNBuffer(base64Bn, 'base64') //转成buffer
         let base64Str = App.ende.aesDecrypt(obj.content, cipher) //解密文件内容
 
-        App.fileAction.generatePdf(base64Str, '/Users/johnzhu/Desktop/demo.pdf', (flag) => {
+        App.fileAction.generatePdf(base64Str, '/Users/johnzhu/Desktop/demo.jpeg', (flag) => {
             if (flag) {
                 console.log('生成pdf成功！')
             } else {
@@ -143,14 +144,14 @@ class Biz extends React.Component<{}, {}>{
                     <button onClick={this.createPdf.bind(this)}>创建pdf</button>
                 </div> */}
                 <div style={{ marginTop: '20px' }}>
-                    <input type="file" className="upload" accept="application/pdf" onChange={this.uploadfile2.bind(this)} />
+                    <input type="file" className="upload" onChange={this.uploadfile2.bind(this)} />
 
                     <button onClick={this.enByPubkey.bind(this)}>AES加密</button>
 
                 </div>
                 <div style={{ marginTop: '20px' }}>
 
-                    <input type="file" className="upload" accept="application/text" onChange={this.uploadfile3.bind(this)} />
+                    <input type="file" className="upload" onChange={this.uploadfile3.bind(this)} />
 
                     <button onClick={this.deByPrivKey.bind(this)}>AES解密</button>
                 </div>

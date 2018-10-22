@@ -338,7 +338,7 @@ function deprecated_aesDecryptForJava(secretKey, data) {
     return cipher.update(data, 'hex', 'utf8') + cipher.final('utf8');
 }
 
-//added by john,新的AES加密
+//added by john,新的AES加解密
 /**
  * 
  * 
