@@ -16,11 +16,13 @@ let mainWindow
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({ width: 800, height: 600 })
+    taskWindow = new BrowserWindow({ width: 800, height: 600, show: false }) //任务窗口,不显示
 
     // and load the index.html of the app.
     //判断是否是开发模式
     if (pkg.DEV) {
         mainWindow.loadURL("http://localhost:3000/")
+        taskWindow.loadURL("http://localhost:3000/task.html")
     } else {
         // console.log(path.join(__dirname, '/build/index.html'))
         mainWindow.loadURL(url.format({
@@ -80,3 +82,17 @@ global.fileAction = fileAction
 global.ende = ende
 global.ecdh = ecdh
 global.encrypt = encrypt
+
+
+//主进程和渲染进程通信 
+//In main process.
+// const { ipcMain } = require('electron')
+// ipcMain.on('asynchronous-message', (event, arg) => {
+//     console.log(arg) // prints "ping"
+//     event.sender.send('asynchronous-reply', '异步接收')
+// })
+
+// ipcMain.on('synchronous-message', (event, arg) => {
+//     console.log(arg) // prints "ping"
+//     event.returnValue = '同步接收'
+// })

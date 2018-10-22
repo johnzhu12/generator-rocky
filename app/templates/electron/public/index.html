@@ -55,6 +55,15 @@
 
     }
   }
+
+  // In renderer process (web page).
+  const { ipcRenderer } = require('electron')
+  console.log(ipcRenderer.sendSync('synchronous-message', '同步发送')) // prints "pong"
+
+  ipcRenderer.on('asynchronous-reply', (event, arg) => {
+    console.log(arg) // prints "pong"
+  })
+  ipcRenderer.send('asynchronous-message', '异步发送')
 </script>
 
 </html>
