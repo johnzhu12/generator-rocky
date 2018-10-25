@@ -106,15 +106,14 @@ class Biz extends React.Component<{}, {}>{
             keyEnc: keyEnc,
             mykeyEnc: mykeyEnc
         }
-        // var form = new FormData()
-        // form.append(Obj)
-        // App.fileAction.backupFile('/Users/zhujohn/Desktop/1.text', JSON.stringify(Obj), function (flag) {
-        //     if (flag) {
-        //         console.log('保存成功');
-        //     } else {
-        //         console.log('失败');
-        //     }
-        // })
+
+        App.fileAction.backupFile('/Users/zhujohn/Desktop/1.text', JSON.stringify(Obj), function (flag) {
+            if (flag) {
+                console.log('保存成功');
+            } else {
+                console.log('失败');
+            }
+        })
 
     }
     //解密

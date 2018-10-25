@@ -86,13 +86,14 @@ global.encrypt = encrypt
 
 //主进程和渲染进程通信 
 //In main process.
-// const { ipcMain } = require('electron')
-// ipcMain.on('asynchronous-message', (event, arg) => {
-//     console.log(arg) // prints "ping"
-//     event.sender.send('asynchronous-reply', '异步接收')
-// })
+const { ipcMain } = require('electron')
+ipcMain.on('asynchronous-message', (event, arg) => {
+    console.log(arg) // prints "ping"
+    event.sender.send('asynchronous-reply', '异步接收')
+})
 
-// ipcMain.on('synchronous-message', (event, arg) => {
-//     console.log(arg) // prints "ping"
-//     event.returnValue = '同步接收'
-// })
+ipcMain.on('synchronous-message', (event, arg) => {
+    console.log(arg) // prints "ping"
+    event.returnValue = '同步接收'
+})
+
