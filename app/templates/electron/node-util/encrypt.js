@@ -3,6 +3,7 @@ let EC = require('elliptic').ec;
 let bitcore = require('bitcore-lib');
 const ecdh = require('./ecdh');
 const BN = bitcore.crypto.BN
+const crypto = require('crypto');
 
 let PrivateKey = bitcore.PrivateKey;
 let ec = new EC('p256');  // p256
@@ -11,14 +12,23 @@ getbase64str = function (P) {
     let base64Str = new Buffer(Buffer.from(P.encode('hex'), 'hex')).toString('base64');
     return base64Str;
 }
-getkey2 = function () { //后端返回的key2
-    pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I=' //后端给我的公钥
-    let key2 = ec.keyFromPublic(ecdh.base64ToHex(pub), 'hex');
-    return key2
+getkeyFrombase64 = function (keybase64Data, fromPub) { //后端返回的key2
+    let key = fromPub ? ec.keyFromPublic(ecdh.base64ToHex(keybase64Data), 'hex') : ec.keyFromPrivate(ecdh.base64ToHex(keybase64Data), 'hex');;
+    return key
 }
 getCypher = function (key1, key2) {
     let shared = key1.derive(key2.getPublic())
     return shared.toBuffer({ size: 32 });
+}
+newGetCypher = function (key1, key2) {
+    let shared = key1.derive(key2.getPublic())
+    let cypher = shared.toBuffer({ size: 32 });
+    // let shaCypher = App.ecdh.sha3(cypher)
+    let sha256Sum = crypto.createHash('sha256');
+    let shaCypher = sha256Sum.update(cypher).digest('hex');
+    const newcypher = crypto.pbkdf2Sync(cypher, shaCypher.slice(0, 128), 100000, 32, 'sha256');
+    console.log('newcypher', newcypher)
+    return newcypher
 }
 
 /**
@@ -68,7 +78,7 @@ createPairKeys = function () {
 enByPubkey = function (pubKeyData, privKeyData, text) {
     let key2 = ec.keyFromPublic(ecdh.base64ToHex(pubKeyData), 'hex');
     let key1 = ec.keyFromPrivate(ecdh.base64ToHex(privKeyData), 'hex');
-    let cypher = getCypher(key1, key2)
+    let cypher = newGetCypher(key1, key2)
     if (typeof text === 'object') {
         text = JSON.stringify(text);
     }
@@ -80,7 +90,7 @@ enByPubkey = function (pubKeyData, privKeyData, text) {
 deByPrivKey = function (privKeyData, publicKeyData, encrypted) {
     let key2 = ec.keyFromPublic(ecdh.base64ToHex(publicKeyData), 'hex');
     let key1 = ec.keyFromPrivate(ecdh.base64ToHex(privKeyData), 'hex'); // hex string, array or Buffer
-    let cypher = getCypher(key1, key2)
+    let cypher = newGetCypher(key1, key2)
     encrypted = Buffer(encrypted, 'base64')
     let result = ecdh.decrypt(encrypted, cypher)
     return result;
@@ -160,7 +170,9 @@ module.exports = {
     verifySign,
     // getRadomKeyPair,
     // getPriPubKeys,
+    getCypher,
     createPairKeys,
-    strToBNBuffer
+    strToBNBuffer,
+    getkeyFrombase64
 }
 

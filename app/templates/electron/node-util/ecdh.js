@@ -71,7 +71,13 @@ var _sha3 = function (a, bits) {
 	if (!bits) bits = 256
 	return createKeccakHash('keccak' + bits).update(a).digest()
 }
-
+exports.sha3 = function (a, bits) {
+	if (!Buffer.isBuffer(a)) {
+		a = Buffer(a);
+	}
+	if (!bits) bits = 256
+	return createKeccakHash('keccak' + bits).update(a).digest()
+}
 exports.sign = function (msg, privateKey) {
 	if (!Buffer.isBuffer(privateKey)) {
 		privateKey = exports.generatePrivate(privateKey).toBuffer();
