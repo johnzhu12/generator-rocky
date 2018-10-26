@@ -25,9 +25,10 @@ newGetCypher = function (key1, key2) {
     let cypher = shared.toBuffer({ size: 32 });
     // let shaCypher = App.ecdh.sha3(cypher)
     let sha256Sum = crypto.createHash('sha256');
-    let shaCypher = sha256Sum.update(cypher).digest('hex');
-    const newcypher = crypto.pbkdf2Sync(cypher, shaCypher.slice(0, 128), 100000, 32, 'sha256');
-    console.log('newcypher', newcypher)
+    let shaCypher = sha256Sum.update(cypher).digest();
+    console.log('salt', shaCypher.slice(0, 16).toString('base64'))
+    const newcypher = crypto.pbkdf2Sync(cypher, shaCypher.slice(0, 16), 100000, 32, 'sha256');
+    console.log('newcypher', newcypher.toString('base64'))
     return newcypher
 }
 
