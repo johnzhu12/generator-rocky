@@ -96,12 +96,12 @@ class Biz extends React.Component<{}, {}>{
 
         let encryptedStr = App.ende.aesEncrypt(base64Str, cipher)
 
-        let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privateKey, base64Bn) //对key进行非对称加密
-        let mykeyEnc = App.encrypt.enByPubkey(keyObj.publicKey, keyObj.privateKey, base64Bn) //抄送自己一份
+        let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privKey, base64Bn) //对key进行非对称加密
+        let mykeyEnc = App.encrypt.enByPubkey(keyObj.pubKey, keyObj.privKey, base64Bn) //抄送自己一份
         console.log('base64Bn', base64Bn)
 
         let Obj = {
-            pubKey: keyObj.publicKey,
+            pubKey: keyObj.pubKey,
             content: encryptedStr,
             keyEnc: keyEnc,
             mykeyEnc: mykeyEnc
@@ -121,7 +121,7 @@ class Biz extends React.Component<{}, {}>{
         let keyPair = JSON.parse(localStorage.getItem('keyPair'))
         // console.log(this.textStr)
         let obj = JSON.parse(this.textStr)
-        let base64Bn = App.encrypt.deByPrivKey(keyPair.privateKey, keyPair.publicKey, obj.mykeyEnc) //对key进行非对称解密
+        let base64Bn = App.encrypt.deByPrivKey(keyPair.privKey, keyPair.pubKey, obj.mykeyEnc) //对key进行非对称解密
 
         let cipher = App.encrypt.strToBNBuffer(base64Bn, 'base64') //转成buffer
         let base64Str = App.ende.aesDecrypt(obj.content, cipher) //解密文件内容

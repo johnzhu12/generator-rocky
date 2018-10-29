@@ -59,8 +59,8 @@ strToBNBuffer = function (str, encode) {
 createPairKeys = function () {
     let key = ec.genKeyPair();
     let result = {
-        publicKey: getBase64PubfromKey(key),
-        privateKey: getBase64PrivfromKey(key)
+        pubKey: getBase64PubfromKey(key),
+        privKey: getBase64PrivfromKey(key)
     }
     return result;
 }
