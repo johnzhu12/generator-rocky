@@ -20,14 +20,14 @@ let keyObj = {
 // console.log('keyObj', keyObj)
 
 //加密
-let enc = App.encrypt.enByPubkey(pub, keyObj.privateKey, '李洋') //对key进行非对称加密
+let enc = App.encrypt.enByPubkey(pub, keyObj.privateKey, '你好啊') //对key进行非对称加密
 
 console.log('公钥', keyObj.publicKey)
 console.log('密文', enc)
 
 //解密
-// let enc2 = 'JAKWTimR7dVEBzsq1l/S2Rbl+zChVOMznKOtTm48sPK1lgOwhVRa+GuJ+BLYN+4X'
-let text = App.encrypt.deByPrivKey(keyObj.privateKey, pub, enc) //对key进行非对称加密
+let enc2 = '5N+4I4erzhBCxe2oKVgdkLiE3kLcvaXdQuH13siyz8L1h4C39Pin2l1xdbjYqzSo'
+let text = App.encrypt.deByPrivKey(keyObj.privateKey, pub, enc2) //对key进行非对称加密
 
 
 console.log(text)

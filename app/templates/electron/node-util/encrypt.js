@@ -8,8 +8,13 @@ const crypto = require('crypto');
 let PrivateKey = bitcore.PrivateKey;
 let ec = new EC('p256');  // p256
 
-getbase64str = function (P) {
+getBase64PubfromKey = function (key) {
+    let P = key.getPublic()
     let base64Str = new Buffer(Buffer.from(P.encode('hex'), 'hex')).toString('base64');
+    return base64Str;
+}
+getBase64PrivfromKey = function (key) {
+    let base64Str = ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString())
     return base64Str;
 }
 getkeyFrombase64 = function (keybase64Data, fromPub) { //后端返回的key2
@@ -20,15 +25,17 @@ getCypher = function (key1, key2) {
     let shared = key1.derive(key2.getPublic())
     return shared.toBuffer({ size: 32 });
 }
-newGetCypher = function (key1, key2) {
+newGetCypher = function (key1, key2, isEncrypt) { //isEncrypt是否是加密，加解密fixInfoStr要求key的顺序变动
     let shared = key1.derive(key2.getPublic())
     let cypher = shared.toBuffer({ size: 32 });
-    // let shaCypher = App.ecdh.sha3(cypher)
-    let sha256Sum = crypto.createHash('sha256');
-    let shaCypher = sha256Sum.update(cypher).digest();
+    let fixInfoStr = isEncrypt ? 'ECDH' + getBase64PubfromKey(key1) + getBase64PubfromKey(key2) : 'ECDH' + getBase64PubfromKey(key2) + getBase64PubfromKey(key1)//key1和key2的公钥base64拼接;
+    const buf = Buffer.from(fixInfoStr, 'utf8');
 
-    console.log('salt', shaCypher.slice(0, 16).toString('base64'))
-    let hmac = crypto.createHmac('sha256', shaCypher.slice(0, 16))
+    let sha256Sum = crypto.createHash('sha256');
+    let fixInfoSha = sha256Sum.update(buf).digest();
+
+    console.log('salt', fixInfoSha.toString('base64'))
+    let hmac = crypto.createHmac('sha256', fixInfoSha)
     let newcypher = hmac.update(cypher).digest();
     // let newcypher = crypto.pbkdf2Sync(cypher, shaCypher.slice(0, 16), 100000, 32, 'sha256');
     console.log('newcypher', newcypher.toString('base64'))
@@ -48,25 +55,12 @@ strToBNBuffer = function (str, encode) {
     return bnBuffer;
 }
 
-// getCypher();
-// getRadomKeyPair = function (pub) {
-//     let key = ec.genKeyPair();
-//     return key;
-// }
-// getPriPubKeys = function (key) {
-//     let result = {
-//         publicKey: getbase64str(key.getPublic()),
-//         privateKey: ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString())
-//     }
-//     // console.log('公钥:', result.publicKey);
-//     // console.log('私钥:', result.privateKey);
-//     return result;
-// }
+
 createPairKeys = function () {
     let key = ec.genKeyPair();
     let result = {
-        publicKey: getbase64str(key.getPublic()),
-        privateKey: ecdh.hexToBase64(PrivateKey(key.getPrivate()).toString())
+        publicKey: getBase64PubfromKey(key),
+        privateKey: getBase64PrivfromKey(key)
     }
     return result;
 }
@@ -82,7 +76,7 @@ createPairKeys = function () {
 enByPubkey = function (pubKeyData, privKeyData, text) {
     let key2 = ec.keyFromPublic(ecdh.base64ToHex(pubKeyData), 'hex');
     let key1 = ec.keyFromPrivate(ecdh.base64ToHex(privKeyData), 'hex');
-    let cypher = newGetCypher(key1, key2)
+    let cypher = newGetCypher(key1, key2, true)
     if (typeof text === 'object') {
         text = JSON.stringify(text);
     }
