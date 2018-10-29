@@ -26,7 +26,7 @@ console.log('公钥', keyObj.publicKey)
 console.log('密文', enc)
 
 //解密
-// let enc2 = 'GhGW9OeUox+TOoLEL/oVoyv6ybyrG6fSB2hdUDj2bFx9qQxG6DJnEjv5a3WLd+0d'
+// let enc2 = 'JAKWTimR7dVEBzsq1l/S2Rbl+zChVOMznKOtTm48sPK1lgOwhVRa+GuJ+BLYN+4X'
 let text = App.encrypt.deByPrivKey(keyObj.privateKey, pub, enc) //对key进行非对称加密
 
 
