@@ -83,10 +83,13 @@ class Biz extends React.Component<{}, {}>{
     }
     //加密
     enByPubkey() {
-        // let pub = 'BBVdJPbzw1IbwOI53pgzeUAb8Zw7ff4S8oA3Y79JKv/9I2tTAoPzlpEE04NHd838M/ookODObgG7FBssRxesH1I=' //后端给我的公钥
-        let pub = 'BFv5WUi8bwb6EysL9ntmQPOV67mxT9Z/wMobOdDC3/VE56frGMgxYhlYUWngxIV94ME4WVouvmaAZqZiXZMrHqE='
+        let pub = 'BFv5WUi8bwb6EysL9ntmQPOV67mxT9Z/wMobOdDC3/VE56frGMgxYhlYUWngxIV94ME4WVouvmaAZqZiXZMrHqE=' //DBS的公钥
         let base64Str = this.base64String2;
-        let keyObj = App.encrypt.createPairKeys();//生成的随机key
+        // let keyObj = App.encrypt.createPairKeys();//生成的随机key
+        let keyObj = {   //写死的公私钥
+            pubKey: 'BJ+TmEOKxycd703ZpmV5OFwF/5bXGr6kpfEKkSlYgsXpTsfG6k57u5R1FGTXGx2qgJnwSiAfeBEOz5AMr4OcNjA=',
+            privKey: 'KIloFd+iYcsxVLUW83HiqYAkd5uf3BtVqQtlGD0/1BE='
+        }
         localStorage.setItem('keyPair', JSON.stringify(keyObj)) //存储key
 
         let myAesKey = common.until.getRadomKey() //生成的64位加密key
@@ -97,14 +100,13 @@ class Biz extends React.Component<{}, {}>{
         let encryptedStr = App.ende.aesEncrypt(base64Str, cipher)
 
         let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privKey, base64Bn) //对key进行非对称加密
-        let mykeyEnc = App.encrypt.enByPubkey(keyObj.pubKey, keyObj.privKey, base64Bn) //抄送自己一份
+        // let mykeyEnc = App.encrypt.enByPubkey(keyObj.pubKey, keyObj.privKey, base64Bn) //抄送自己一份
         console.log('base64Bn', base64Bn)
 
         let Obj = {
             pubKey: keyObj.pubKey,
             content: encryptedStr,
-            keyEnc: keyEnc,
-            mykeyEnc: mykeyEnc
+            keyEnc: keyEnc
         }
 
         App.fileAction.backupFile('/Users/zhujohn/Desktop/1.text', JSON.stringify(Obj), function (flag) {
@@ -159,3 +161,4 @@ class Biz extends React.Component<{}, {}>{
     }
 }
 export default Biz
+
