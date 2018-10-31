@@ -22,12 +22,12 @@ let keyObj = {
 //加密
 let enc = App.encrypt.enByPubkey(pub, keyObj.privKey, '你好啊') //对key进行非对称加密
 
-console.log('公钥', keyObj.publicKey)
+console.log('公钥', keyObj.pubKey)
 console.log('密文', enc)
 
 //解密
-let enc2 = '5N+4I4erzhBCxe2oKVgdkLiE3kLcvaXdQuH13siyz8L1h4C39Pin2l1xdbjYqzSo'
-let text = App.encrypt.deByPrivKey(keyObj.privKey, pub, enc2) //对key进行非对称加密
+// let enc2 = '5N+4I4erzhBCxe2oKVgdkLiE3kLcvaXdQuH13siyz8L1h4C39Pin2l1xdbjYqzSo'
+// let text = App.encrypt.deByPrivKey(keyObj.privKey, pub, enc2) //对key进行非对称加密
 
 
-console.log(text)
+// console.log(text)

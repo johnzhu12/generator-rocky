@@ -7,7 +7,8 @@ let AESCBC = require('./lib/aescbc');
 let PrivateKey = bitcore.PrivateKey;
 let PublicKey = bitcore.PublicKey;
 let createKeccakHash = require('keccak')
-let secp256k1 = require('secp256k1')
+let secp256k1 = require('secp256k1');
+let crypto = require('crypto');
 
 
 var hexToBase64 = exports.hexToBase64 = function (str) {
@@ -105,7 +106,9 @@ exports.generateCypher = function (AprivateKey, BpublicKey) {
 }
 
 exports.encrypt = function (data, cypher) {
-	var ivbuf = _sha3(data).slice(0, 16);
+	// var ivbuf = _sha3(data).slice(0, 16);
+	//modified 10-31
+	const ivbuf = crypto.randomBytes(16);
 	if (!Buffer.isBuffer(data)) {
 		data = Buffer(data);
 	}
