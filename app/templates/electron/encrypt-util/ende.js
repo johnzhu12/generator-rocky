@@ -1,11 +1,8 @@
-const NodeRSA = require('node-rsa');
 const CryptoJS = require("crypto-js");
 const crypto = require('crypto');
 const fs = require('fs');
 const join = require('path').join;
 const base64 = require('binary-base64');
-const electron = require("electron");
-const dialog = electron.dialog;
 const ecdh = require('./ecdh');
 /**
 return json: hex string
@@ -44,7 +41,7 @@ param privKeyData, type: hex key string
 param text, type string
 return base64
 **/
-function deprecated_signByPriv(privKeyData, text) {
+function signByPriv(privKeyData, text) {
     privKeyData = ecdh.base64ToHex(privKeyData);
     let sig = ecdh.sign(text, privKeyData);
     var fullRet = {};
@@ -65,7 +62,7 @@ param text, type string
 param signatureBase64 
 return boolean
 **/
-function deprecated_verifySign(pubKeyData, text, signatureBase64) {
+function verifySign(pubKeyData, text, signatureBase64) {
     pubKeyData = ecdh.base64ToHex(pubKeyData);
     // r + s + v
     // let signatureHex = ecdh.base64ToHex(signatureBase64).slice(0,128);
@@ -81,7 +78,7 @@ param  pubKeyData,  type:hex key string
 param  text, string
 return base64
 */
-function deprecated_enByPubkey(pubKeyData, privKeyData, text) {
+function enByPubkey(pubKeyData, privKeyData, text) {
     pubKeyData = ecdh.base64ToHex(pubKeyData);
     privKeyData = ecdh.base64ToHex(privKeyData);
     let cypher = ecdh.generateCypher(privKeyData, pubKeyData);
@@ -97,7 +94,7 @@ param  privKeyData,  type:hex key string,
 param  encrypted, type base64
 return string
 */
-function deprecated_deByPrivKey(privKeyData, publicKeyData, encrypted) {
+function deByPrivKey(privKeyData, publicKeyData, encrypted) {
     publicKeyData = ecdh.base64ToHex(publicKeyData);
     privKeyData = ecdh.base64ToHex(privKeyData);
     encrypted = Buffer(encrypted, 'base64');
@@ -265,7 +262,7 @@ function writeFsSy(path, content) {
     }
     return flag;
 }
-
+fotTest()
 function genNewDir(curPath) {
     if (!fsExistsSync(curPath)) {
         fs.mkdirSync(curPath);
@@ -346,7 +343,7 @@ function deprecated_aesDecryptForJava(secretKey, data) {
  * @param {any} cipher 
  * @returns 
  */
-function aesEncrypt(base64Str, cipher) {
+function newAesEncrypt(base64Str, cipher) {
     return ecdh.hexToBase64(ecdh.encrypt(base64Str, cipher).toString('hex'))
 }
 /**
@@ -356,15 +353,15 @@ function aesEncrypt(base64Str, cipher) {
  * @param {buffer} cipher 
  * @returns 
  */
-function aesDecrypt(encryptedText, cipher) {
+function newAesDecrypt(encryptedText, cipher) {
     return ecdh.decrypt(new Buffer(encryptedText, 'base64'), cipher) //解密文件内容
 }
 module.exports = {
     createPairKeys,
-    deprecated_signByPriv,
-    deprecated_verifySign,
-    deprecated_enByPubkey,
-    deprecated_deByPrivKey,
+    signByPriv,
+    verifySign,
+    enByPubkey,
+    deByPrivKey,
     decryptList,
     dencryptData,
     aesEncrypt,
@@ -379,6 +376,6 @@ module.exports = {
     fs,
     deprecated_aesEncryptForJava,
     deprecated_aesDecryptForJava,
-    aesEncrypt,
-    aesDecrypt
+    newAesEncrypt,
+    newAesDecrypt
 }

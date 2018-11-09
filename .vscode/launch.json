@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "debug node",
-            "program": "${workspaceFolder}/app/templates/electron/node-util/index.js"
+            "program": "${workspaceFolder}/app/templates/electron/encrypt-util/ende.js"
         },
         {
             "name": "Debug Main Process",

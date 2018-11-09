@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const ende = require('./ende.js');
+const ende = require('../encrypt-util/ende.js');
 const dialog = require('electron').dialog;
 // const json2csv = require('json2csv')
 const iconv = require('iconv-lite');

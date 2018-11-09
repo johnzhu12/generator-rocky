@@ -83,7 +83,8 @@ class Biz extends React.Component<{}, {}>{
     }
     //加密
     enByPubkey() {
-        let pub = 'BFv5WUi8bwb6EysL9ntmQPOV67mxT9Z/wMobOdDC3/VE56frGMgxYhlYUWngxIV94ME4WVouvmaAZqZiXZMrHqE=' //DBS的公钥
+        // let pub = 'BFv5WUi8bwb6EysL9ntmQPOV67mxT9Z/wMobOdDC3/VE56frGMgxYhlYUWngxIV94ME4WVouvmaAZqZiXZMrHqE=' //DBS的公钥
+        let pub = "BIJCLnNulQqYhr7oWUAYB5myfpeVs78zg6pGQHZExALPmFVY8SjbsJD1S/nvEIoNo1nBVMqkRzj/O3Akt4SwwDU="
         let base64Str = this.base64String2;
         // let keyObj = App.encrypt.createPairKeys();//生成的随机key
         let keyObj = {   //写死的公私钥
@@ -97,7 +98,7 @@ class Biz extends React.Component<{}, {}>{
         let cipher = App.encrypt.strToBNBuffer(myAesKey, 'hex')  //转成bigNum buffer,和cipher类型一致
         let base64Bn = cipher.toString('base64')  //转成base64格式
 
-        let encryptedStr = App.ende.aesEncrypt(base64Str, cipher)
+        let encryptedStr = App.ende.newAesEncrypt(base64Str, cipher)
 
         let keyEnc = App.encrypt.enByPubkey(pub, keyObj.privKey, base64Bn) //对key进行非对称加密
         // let mykeyEnc = App.encrypt.enByPubkey(keyObj.pubKey, keyObj.privKey, base64Bn) //抄送自己一份
