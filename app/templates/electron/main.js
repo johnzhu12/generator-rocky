@@ -33,7 +33,7 @@ function createWindow() {
     }
     // mainWindow.loadURL("http://www.baidu.com")
 
-    //uncomment这段代码，默认在浏览器里打开，否则在新窗口打开连接
+    //
     // mainWindow.webContents.on('new-window', function (e, url) {
     //     e.preventDefault();
     //     console.log('haahh', url)
