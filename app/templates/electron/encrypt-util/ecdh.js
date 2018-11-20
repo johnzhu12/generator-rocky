@@ -7,7 +7,9 @@ let AESCBC = require('./lib/aescbc');
 let PrivateKey = bitcore.PrivateKey;
 let PublicKey = bitcore.PublicKey;
 let createKeccakHash = require('keccak')
-let secp256k1 = require('secp256k1')
+let secp256k1 = require('secp256k1');
+let crypto = require('crypto');
+let BigInteger = require('bigi');
 
 
 var hexToBase64 = exports.hexToBase64 = function (str) {
@@ -50,13 +52,18 @@ var generateKeyPair = exports.generateKeyPair = function () {
 	var newPrivate = null;
 	var len = 0;
 	while (len != 32) {
-		newPrivate = PrivateKey();
+		let seed = 'mawenjing0' + 'active' + 'tywky5-vyvzid-mIdboh' //adde by john
+		let sha256Sum = crypto.createHash('sha256');
+		let seedHex = sha256Sum.update(seed).digest('hex');
+		let bnBuf = BigInteger.fromHex(seedHex).toBuffer()
+		newPrivate = PrivateKey(bnBuf);
 		len = newPrivate.bn.toBuffer().length;
 	}
 	var keyPair = {
 		privateKey: newPrivate.toString(),
 		publicKey: privateToPublic(newPrivate)
 	};
+	// console.log('keyPair', keyPair)
 	return keyPair;
 }
 
@@ -105,7 +112,9 @@ exports.generateCypher = function (AprivateKey, BpublicKey) {
 }
 
 exports.encrypt = function (data, cypher) {
-	var ivbuf = _sha3(data).slice(0, 16);
+	// var ivbuf = _sha3(data).slice(0, 16);
+	//modified 10-31
+	const ivbuf = crypto.randomBytes(16);
 	if (!Buffer.isBuffer(data)) {
 		data = Buffer(data);
 	}

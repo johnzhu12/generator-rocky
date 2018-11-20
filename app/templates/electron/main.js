@@ -4,9 +4,9 @@ const path = require('path')
 const url = require('url')
 const pkg = require('./package.json') // 引用package.json
 const fileAction = require('./node-util/fileAction')
-const ende = require('./node-util/ende')
-const ecdh = require('./node-util/ecdh')
-const encrypt = require('./node-util/encrypt')
+const ende = require('./encrypt-util/ende')
+const ecdh = require('./encrypt-util/ecdh')
+const encrypt = require('./encrypt-util/encrypt')
 // const { requireTaskPool } = require('electron-remote')
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -41,7 +41,7 @@ function createWindow() {
     // });
 
     // Open the DevTools.
-    // mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function () {
