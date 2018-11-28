@@ -4,7 +4,8 @@ let imgSrc = require('@static/yuanyuan.jpg')
 let imgSrc2 = require('@static/stamp.jpg')
 let jsPDF = require('jspdf')
 declare var App: any;
-declare var html2canvas: any
+// declare var html2canvas: any
+const html2canvas = require('html2canvas')
 
 /**
 *
@@ -52,42 +53,42 @@ class Biz extends React.Component<{}, {}>{
             // document.body.appendChild(canvas);
             if (cb) {
                 // console.log(canvas.toDataURL())
-                cb(canvas.toDataURL("image/jpeg", 1.0)) //图片质量，0-1
+                // cb(canvas.toDataURL("image/jpeg", 1.0)) //图片质量，0-1
             }
 
         });
     }
     componentDidMount() {
-        var mycanvas = document.getElementById('mycanvas') as HTMLCanvasElement;
-        var context = mycanvas.getContext('2d');
+        // var mycanvas = document.getElementById('mycanvas') as HTMLCanvasElement;
+        // var context = mycanvas.getContext('2d');
 
         // context.fillStyle = '#99f';    //   填充颜色
         // context.fillRect(0, 0, 1000, 1000);
 
-        var img = new Image;
-        img.src = imgSrc2;
-        img.onload = function () {
-            context.drawImage(img, 40, 40, 200, 200);
-            drawText()
+        // var img = new Image;
+        // img.src = imgSrc2;
+        // img.onload = function () {
+        //     context.drawImage(img, 40, 40, 200, 200);
+        //     drawText()
 
-        }
+        // }
 
-        function drawText() {
-            //96位的hash
-            var myhash = '// akadjkdawdwahdawhawhdwdrrjkadjkdawdwahdawhdwdrrjkadjkdawdwahdawhdwdrrjkadjkdawdwahdawhdwdrrdwdrr ';
-            context.font = "12pt Arial";
-            context.textAlign = "center";
-            var centerX = 140;
-            var centerY = 140;
-            // var angle = Math.PI * 0.5; // radians
-            var radius = 100
-            context.fillTextCircle(myhash, centerX, centerY, radius, 0)
-        }
+        // function drawText() {
+        //     //96位的hash
+        //     var myhash = '// akadjkdawdwahdawhawhdwdrrjkadjkdawdwahdawhdwdrrjkadjkdawdwahdawhdwdrrjkadjkdawdwahdawhdwdrrdwdrr ';
+        //     context.font = "12pt Arial";
+        //     context.textAlign = "center";
+        //     var centerX = 140;
+        //     var centerY = 140;
+        //     // var angle = Math.PI * 0.5; // radians
+        //     var radius = 100
+        //     context.fillTextCircle(myhash, centerX, centerY, radius, 0)
+        // }
 
         let ele = document.querySelector('.mybtn') as HTMLElement;
         let targetDom = $('#targetDom')[0]
         ele.onclick = () => {
-            this.doScreenShot(targetDom, function (oriBase64Str, width, height) {
+            this.doScreenShot(targetDom, function (oriBase64Str) {
                 // let imgData = oriBase64Str.split(';base64,').pop();
                 var pdf = new jsPDF();
 
@@ -107,9 +108,9 @@ class Biz extends React.Component<{}, {}>{
 
                 </div>
                 <div style={{ color: 'red' }}>hello world</div>
-                <img src={imgSrc} alt="he" style={{ background: `url(${imgSrc})`, width: '200px', height: '150px', border: '1px solid red' }} />
+                {/* <img src={imgSrc} alt="he" style={{ background: `url(${imgSrc})`, width: '200px', height: '150px', border: '1px solid red' }} />
 
-                <canvas id="mycanvas" width="1111" height="1111"></canvas>
+                <canvas id="mycanvas" width="1111" height="1111"></canvas> */}
 
             </div>
         )
