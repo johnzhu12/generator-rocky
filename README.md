@@ -34,7 +34,3 @@ npm link
 
 yeoman是一个脚手架工具，提供构建生态系统,可以设计丰富的交互来创建新的项目，提高效率。
 
-### 1.3 yeman项目架构
-
-![yeoman-arch](./docs/imgs/yeoman-arch.jpg)
-
